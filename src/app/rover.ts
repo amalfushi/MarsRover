@@ -7,14 +7,34 @@ export class Rover {
     column: number;
     direction: Facing;
     instructions: string;
+    status: boolean;
 
     constructor(xStart: number, yStart: number, dir: Facing) {
         this.row = xStart;
         this.column = yStart;
         this.direction = dir;
+        this.status = true;
     }
 
-    move() {
+    executeInstruction(str: string): Rover {
+        switch (str) {
+            case "L": {
+                this.left();
+                break;
+            }
+            case "R": {
+                this.right();
+                break;
+            }
+            case "M": {
+                this.move();
+                break;
+            }
+        }
+        return this;
+    }
+
+    move(): Rover {
         switch (this.direction) {
             case Facing.north: {
                 this.row++;
@@ -36,13 +56,13 @@ export class Rover {
         return this;
     }
 
-    turn(direction: string) {
+    turn(direction: string): Rover {
         if (direction === "L") this.left();
         if (direction === "R") this.right();
         return this;
     }
 
-    left() {
+    left(): Rover {
         switch (this.direction) {
             case Facing.north: {
                 this.direction = Facing.west;
@@ -61,9 +81,10 @@ export class Rover {
                 break;
             }
         }
+        return this;
     }
 
-    right() {
+    right(): Rover {
         switch (this.direction) {
             case Facing.north: {
                 this.direction = Facing.east;
@@ -82,9 +103,17 @@ export class Rover {
                 break;
             }
         }
+        return this;
     }
 
-    getPosition() {
+    checkForBoundaries(xMax, yMax): boolean {
+        if (this.column < 0 || this.column > xMax || this.row < 0 || this.row > yMax) {
+            this.status = false;
+        }
+        return this.status
+    }
+
+    getPosition(): string {
         return `${this.column} ${this.row} ${this.direction}`;
     }
 }
