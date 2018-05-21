@@ -1,0 +1,15 @@
+.row{
+    display: flex;
+    flex-direction: row;
+    height: 5rem;
+}
+
+.col{
+    width: 5rem;
+    border: solid thin black;
+}
+
+.map{
+    margin: auto;
+    /* width: 300px; */
+}
