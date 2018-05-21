@@ -1,0 +1,38 @@
+<div *ngIf="map == null">
+  <h5>Create Map</h5>
+  <p>Enter two digits for x and y resectively.  Max map size is 9x9</p>
+  <input class="new-map" [(ngModel)]="newMapSize" placeholder="eg: 5 5" (keyup.enter)="createMap()">
+</div>
+
+<div *ngIf="map != null">
+  <!-- add rovers -->
+  <div>
+    <h5>Create Rovers</h5>
+    <p>Enter two digits followed by a letter representing the cardinal direction the rover is facing</p>
+    <input class="new-rover" name="new-rover" [(ngModel)]="start" #newRover="ngModel" placeholder="eg: 2 2 N" autofocus="" (keyup.enter)="addRover()">
+    <!-- <label class="error" *ngIf="!newRover.valid && newRover.dirty">X</label>
+    <label class="valid" *ngIf="newRover.valid && newRover.dirty">&#10004;</label> -->
+  </div>
+
+  <!-- rovers list -->
+  <div *ngIf="rovers.length > 0">
+    <h5>Enter a string of characters to direct the rover to move around the plateau. Each rover will move in order starting at the top of the list. Empty strings will leave the rover where remains</h5>
+    <ul>
+      <li> L = Rotate left 90°</li>
+      <li> R = Rotate rigth 90°</li>
+      <li> M = Move forward one space</li>
+    </ul>
+    <form (submit)="executeInstructions()" #formData="ngForm">
+      <ul>
+        <li class="rover" *ngFor="let rover of rovers">
+          <p>{{rover.getPosition()}}</p>
+          <input class="rover-Instructions" name="rover.getPosition()" [(ngModel)]="rover.instructions" placeholder="eg: L M R M" #instructions="ngModel"
+            pattern="[LlRrMm ]*">
+          <label class="error" *ngIf="!instructions.valid && instructions.dirty">X</label>
+          <label class="valid" *ngIf="instructions.valid">&#10004;</label>
+        </li>
+      </ul>
+      <input type="submit" value="Execute all rover instructions" [disabled]="!formData.valid">
+    </form>
+  </div>
+</div>
