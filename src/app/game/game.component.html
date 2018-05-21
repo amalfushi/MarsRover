@@ -1,10 +1,22 @@
 <div *ngIf="map == null">
   <h5>Create Map</h5>
-  <p>Enter two digits for x and y resectively.  Max map size is 9x9</p>
+  <p>Enter two digits for x and y resectively.  Minimum map size is 2x2. Max map size is 9x9</p>
   <input class="new-map" [(ngModel)]="newMapSize" placeholder="eg: 5 5" (keyup.enter)="createMap()">
 </div>
 
 <div *ngIf="map != null">
+ <!-- {{map.tiles}} -->
+  <div class="map">
+    <div class="row" *ngFor="let row of map.tiles">
+      <div class="col" *ngFor="let column of row">
+        <div>
+          <label>{{column}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <!-- add rovers -->
   <div>
     <h5>Create Rovers</h5>
@@ -22,11 +34,12 @@
       <li> R = Rotate rigth 90°</li>
       <li> M = Move forward one space</li>
     </ul>
+
     <form (submit)="executeInstructions()" #formData="ngForm">
       <ul>
         <li class="rover" *ngFor="let rover of rovers">
           <p>{{rover.getPosition()}}</p>
-          <input class="rover-Instructions" name="rover.getPosition()" [(ngModel)]="rover.instructions" placeholder="eg: L M R M" #instructions="ngModel"
+          <input class="rover-instructions" name="rover.getPosition()" [(ngModel)]="rover.instructions" placeholder="eg: L M R M" #instructions="ngModel"
             pattern="[LlRrMm ]*">
           <label class="error" *ngIf="!instructions.valid && instructions.dirty">X</label>
           <label class="valid" *ngIf="instructions.valid">&#10004;</label>
@@ -34,5 +47,6 @@
       </ul>
       <input type="submit" value="Execute all rover instructions" [disabled]="!formData.valid">
     </form>
+
   </div>
 </div>
