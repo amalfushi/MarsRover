@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Rover } from '../rover';
+import { Map } from '../map'
 import { Facing } from '../direction.enum';
 
 @Component({
@@ -12,7 +13,7 @@ export class GameComponent implements OnInit {
   rovers: Rover[];
   start: string;
   newMapSize: string;
-  map: string;
+  map: Map;
 
   constructor() {
     this.rovers = [];
@@ -23,23 +24,20 @@ export class GameComponent implements OnInit {
   ngOnInit() {
   }
 
-  createMap() {
-    // this.parseMapSize()
-    console.log("create map")
-    const mapSpecs = this.parseCoordinates(this.newMapSize, /^\d{2}$/);
+  createMap(): void {
+    const mapSpecs = this.parseCoordinates(this.newMapSize, /^[2-9][2-9]$/);
     if (mapSpecs) {
-      this.map = "ima map";
+      this.map = new Map(mapSpecs[0], mapSpecs[1])
       this.newMapSize = "";
     }
+    // this.map.print();
   }
 
   addRover(): void {
-    console.log("Add Rover")
     const coords = this.parseCoordinates(this.start, /^\d{2}[NESW]$/);
-    console.log(coords);
     if (coords && coords.length === 3) {
-      // change the direction from a character to a proper Facing
-      coords[2] =  coords[2] == "N" ? Facing.north : coords[2] == "E" ? Facing.east : coords[2] == "S" ? Facing.south : Facing.west;
+      // change the rover direction from a character to a proper Facing
+      coords[2] = coords[2] == "N" ? Facing.north : coords[2] == "E" ? Facing.east : coords[2] == "S" ? Facing.south : Facing.west;
       const rover = new Rover(coords[0], coords[1], coords[2]);
       this.rovers.push(rover);
       this.start = "";
@@ -53,12 +51,23 @@ export class GameComponent implements OnInit {
     }
     return null;
   }
-  
+
   executeInstructions(): void {
-    this.rovers.forEach((r) => {
-      console.log(r.instructions);
-      r.instructions = "";
-    })
+    this.rovers.forEach((rover) => {
+
+      // console.log(rover.instructions)
+      if (rover.instructions) {
+        const instArray = this.removeSpaces(rover.instructions).split("");
+        // console.log(instArray)
+        instArray.forEach((instruction) => {
+          if (rover.status) {
+            rover.executeInstruction(instruction);
+            rover.checkForBoundaries(this.map.columns + 1, this.map.rows + 1)
+          }
+        });
+        rover.instructions = "";
+      }
+    });
   }
 
   removeSpaces(str: string): string {
