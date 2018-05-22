@@ -1,16 +1,19 @@
 <div *ngIf="map == null">
   <h5>Create Map</h5>
-  <p>Enter two digits for x and y resectively.  Minimum map size is 2x2. Max map size is 9x9</p>
+  <p>Enter two digits for x and y respectively. Minimum map size is 2x2. Max map size is 9x9</p>
   <input class="new-map" [(ngModel)]="newMapSize" placeholder="eg: 5 5" (keyup.enter)="createMap()">
+  <button (click)="createMap()">Create Mars Plateau</button>
 </div>
 
 <div *ngIf="map != null">
- <!-- {{map.tiles}} -->
+  <!-- {{map.tiles}} -->
   <div class="map">
     <div class="row" *ngFor="let row of map.tiles">
       <div class="col" *ngFor="let column of row">
         <div>
-          <label>{{column}}</label>
+          <label *ngIf="!column.id">{{column}}</label>
+          <label *ngIf="column.id">Rover {{column.id}}</label>
+          <label *ngIf="column.id">( {{column.column}}, {{column.row}} )</label>
         </div>
       </div>
     </div>
@@ -22,13 +25,15 @@
     <h5>Create Rovers</h5>
     <p>Enter two digits followed by a letter representing the cardinal direction the rover is facing</p>
     <input class="new-rover" name="new-rover" [(ngModel)]="start" #newRover="ngModel" placeholder="eg: 2 2 N" autofocus="" (keyup.enter)="addRover()">
+    <button (click)="addRover()">Add Rover</button>
     <!-- <label class="error" *ngIf="!newRover.valid && newRover.dirty">X</label>
     <label class="valid" *ngIf="newRover.valid && newRover.dirty">&#10004;</label> -->
   </div>
 
   <!-- rovers list -->
   <div *ngIf="rovers.length > 0">
-    <h5>Enter a string of characters to direct the rover to move around the plateau. Each rover will move in order starting at the top of the list. Empty strings will leave the rover where remains</h5>
+    <h5>Enter a string of characters to direct the rover to move around the plateau. Each rover will move in order starting at
+      the top of the list. Empty strings will leave the rover where remains</h5>
     <ul>
       <li> L = Rotate left 90°</li>
       <li> R = Rotate rigth 90°</li>
@@ -37,16 +42,20 @@
 
     <form (submit)="executeInstructions()" #formData="ngForm">
       <ul>
-        <li class="rover" *ngFor="let rover of rovers">
+        <li class="rover" *ngFor="let rover of rovers; let i = index;">
           <p>{{rover.getPosition()}}</p>
           <input class="rover-instructions" name="rover.getPosition()" [(ngModel)]="rover.instructions" placeholder="eg: L M R M" #instructions="ngModel"
-            pattern="[LlRrMm ]*">
+            pattern="[LlRrMm ]*" [disabled]="!rover.status">
           <label class="error" *ngIf="!instructions.valid && instructions.dirty">X</label>
           <label class="valid" *ngIf="instructions.valid">&#10004;</label>
+          <a href="#" (click)="deleteRover(rover); $event.preventDefault()">Delete Rover</a>
         </li>
       </ul>
+
       <input type="submit" value="Execute all rover instructions" [disabled]="!formData.valid">
     </form>
 
   </div>
+
+  <button (click)="resetAll()">New map</button>
 </div>
