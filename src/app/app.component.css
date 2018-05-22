@@ -1,0 +1,11 @@
+.wrapper{
+    width: 90%;
+    height: 800px;
+    overflow-y: scroll;
+    margin: 40px auto;
+    border-radius: 40px;
+    border: 30px solid rgb(25, 25, 25);
+    padding: 10px;
+    background-color: rgb(25, 25, 25);
+    
+}

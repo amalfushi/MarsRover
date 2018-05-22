@@ -1,15 +1,59 @@
 .row{
     display: flex;
     flex-direction: row;
-    height: 5rem;
+    margin-top: -1px;
 }
 
 .col{
-    width: 5rem;
+    min-width: 7rem;
+    padding: 5px;
+}
+
+.indent{
+    margin-left: 177px;
+}
+.rover-row {
+    display: flex;
+    width: 470px;
+    justify-content: space-between;
+}
+.map .row {
+    min-height: 7rem;
+}
+
+.map .col {
     border: solid thin black;
+    margin-left: -1px;
+    background-color: rgba(49, 247, 23, .2)
 }
 
 .map{
     margin: auto;
-    /* width: 300px; */
+    width: 100%;
+    margin: auto;
+}
+
+.map-rover{
+    display: block
+}
+
+span{
+    font-weight: bold;
+}
+
+li {
+    list-style: none;
+}
+
+li p {
+    display: inline-block;
+}
+
+.single-line li {
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.crash {
+    color: orangered;
 }

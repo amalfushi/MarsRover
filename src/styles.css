@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    /* background-color: rgb(218, 73, 73); */
+    background-color: tan;
+    color: rgb(32, 209, 9);
+    overflow: hidden;
+}
+
+input, button{
+    opacity: .95;
+}
+
+
+hr {
+    border: thin solid;
+}
