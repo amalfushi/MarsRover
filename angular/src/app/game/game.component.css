@@ -5,7 +5,7 @@
 }
 
 .col{
-    min-width: 7rem;
+    min-width: 7.3rem;
     padding: 5px;
 }
 
@@ -38,7 +38,8 @@
 }
 
 span{
-    font-weight: bold;
+    font-weight: bolder;
+    font-size: 1.2rem;
 }
 
 li {
@@ -56,4 +57,8 @@ li p {
 
 .crash {
     color: orangered;
+}
+
+p {
+    margin-left: 15px;
 }
