@@ -25,16 +25,16 @@ export class GameComponent implements OnInit {
     this.getRovers();
   }
 
-
-
   resetAll(): void {
-    this.rovers = [];
-    this.map = null;
+    this.mapService.resetMap();
+    this.roverService.resetRovers();
+    this.getMap();
+    this.getRovers();
   }
 
 
   // Map Manipulation
-  getMap():void {
+  getMap(): void {
     this.map = this.mapService.getMap();
   }
 
@@ -43,6 +43,7 @@ export class GameComponent implements OnInit {
     if (mapSpecs) {
       this.mapService.generateTiles(mapSpecs[0], mapSpecs[1]);
       this.getMap();
+      this.newMapSize = "";
     }
   }
 
@@ -55,8 +56,14 @@ export class GameComponent implements OnInit {
   addRover(): void {
     const coords = this.parseCoordinates(this.start, /^\d{2}[NESW]$/);
     if (coords && coords.length === 3) {
+      console.log(coords)
       const rover = this.roverService.addRover(coords[0], coords[1], coords[2]);
-      this.mapService.addRover(rover)
+
+      this.mapService.addRover(rover,
+        this.mapService.getRowCount() - rover.row,
+        rover.column);
+
+      rover.checkForBoundaries(this.mapService.getColCount()-1, this.mapService.getRowCount()-1)
       this.getRovers();
       this.getMap();
       this.start = "";
@@ -64,19 +71,31 @@ export class GameComponent implements OnInit {
   }
 
   deleteRover(rover: Rover): void {
+    this.mapService.removeRover(rover,
+      this.mapService.getRowCount() - rover.row,
+      rover.column);
     this.roverService.deleteRoverById(rover.id);
     this.getRovers();
+    this.getMap();
+    console.log(this.rovers)
   }
 
   executeInstructions(): void {
     for (let rover of this.rovers) {
       if (rover.instructions && rover.status) {
-        // to replace rove on map
-        // const start = [rover.row, rover.column];
-        this.mapService.removeRover(rover);
+        // remove rover from the map
+        this.mapService.removeRover(rover,
+          this.mapService.getRowCount() - rover.row,
+          rover.column);
+
+        // move rover as per the instrucitons
         rover.instructions = this.removeSpaces(rover.instructions);
-        this.roverService.executeInstructionsById(rover.id, this.map.columns, this.map.rows);
-        this.mapService.addRover(rover);
+        this.roverService.executeInstructionsById(rover.id);
+
+        // Re-add the rover in the appropriate positon (unless it's outside the boundaries)
+        this.mapService.addRover(rover,
+          this.mapService.getRowCount() - rover.row,
+          rover.column);
         this.getMap();
       }
     }

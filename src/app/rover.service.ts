@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Rover } from './rover';
 import { Facing } from './direction.enum';
+import { MapService } from './map.service';
 
 @Injectable()
 export class RoverService {
@@ -8,18 +9,25 @@ export class RoverService {
   lastId: number = 0;
   rovers: Rover[] = [];
 
-  constructor() { }
+  constructor(private mapService: MapService) { }
+
+  getRovers(): Rover[] {
+    return this.rovers;
+  }
+
+  resetRovers(): RoverService {
+    this.rovers = [];
+    this.lastId = 0;
+    return this;
+  }
 
   addRover(xStart: number, yStart: number, dir: string): Rover {
     // switch dir from a letter to a proper cardinal direction
     const direction = dir == "N" ? Facing.north : dir == "E" ? Facing.east : dir == "S" ? Facing.south : Facing.west;
     const rover = new Rover(xStart, yStart, direction, this.lastId++);
     this.rovers.push(rover);
+    rover.checkForBoundaries(this.mapService.getRowCount(), this.mapService.getColCount());
     return rover;
-  }
-
-  getRovers(): Rover[] {
-    return this.rovers;
   }
 
   deleteRoverById(id: number): RoverService {
@@ -28,14 +36,15 @@ export class RoverService {
     return this;
   }
 
-  executeInstructionsById(id: number, xMax: number, yMax: number): RoverService {
+  executeInstructionsById(id: number): RoverService {
+    
     let rover = this.rovers[id];
     if (rover.instructions) {
-      let tokens = rover.instructions.split("");
-      for (let token of tokens) {
+      let tokens = rover.instructions.split("").reverse();
+      while (tokens.length && rover.status === true) {
         if (rover.status) {
-          rover.operate(token);
-          rover.checkForBoundaries(xMax, yMax);
+          rover.operate(tokens.pop());
+          rover.checkForBoundaries(this.mapService.getRowCount()-1, this.mapService.getColCount()-1);
         }
       }
     }

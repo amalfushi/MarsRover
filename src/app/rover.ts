@@ -108,7 +108,7 @@ export class Rover {
     }
 
     checkForBoundaries(xMax, yMax): boolean {
-        if (this.column < 0 || this.column > xMax || this.row < 0 || this.row > yMax) {
+        if (this.column < 0 || this.column > xMax + 1 || this.row < 0 || this.row > yMax + 1) {
             this.status = false;
         }
         return this.status

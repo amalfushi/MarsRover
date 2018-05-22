@@ -12,11 +12,10 @@ export class MapService {
   generateTiles(width: number, height: number): MapService {
     this.map = new Map(width, height);
     this.map.tiles = [];
-    let i = 0;
     for (let y = 0; y < height; y++) {
       let row = [];
       for (let x = 0; x < width; x++) {
-        row.push(i++);
+        row.push(`${x}, ${y}`);
       }
       this.map.tiles.unshift(row);
     }
@@ -24,15 +23,37 @@ export class MapService {
     return this;
   }
 
-  addRover(rover: Rover): MapService {
-    // console.log(rover.row-1, this.getColCount()-rover.row-1);
-    this.map.tiles[this.getRowCount()-rover.row-1][rover.column - 1] = rover;
+  resetMap(): MapService {
+    this.map = null;
     return this;
   }
 
-  removeRover(rover: Rover): MapService{
-    this.map.tiles[this.getRowCount()-rover.row-1][rover.column - 1] = -1;
+  addRover(rover: Rover, yPos, xPos): MapService {
+    if (rover.column > -1 && rover.column < this.getColCount()+1
+      && rover.row > -1 && rover.row < this.getRowCount()+1) {
+
+      if (this.map.tiles[yPos][xPos] instanceof Array) {
+        this.map.tiles[yPos][xPos].push(rover);
+      } else {
+        this.map.tiles[yPos][xPos] = [rover];
+      }
+    }
     return this;
+  }
+
+  removeRover(rover: Rover, xPos: number, yPos: number): MapService {
+    console.log(xPos, yPos)
+      if (rover.column > -1 && rover.column < this.getColCount()+1
+      && rover.row > -1 && rover.row < this.getRowCount()+1) {
+
+      if (this.map.tiles[yPos][xPos].length > 1) {
+        this.map.tiles[yPos][xPos] = this.map.tiles[yPos][xPos].filter(r => r.id !== rover.id)
+      } else {
+        this.map.tiles[yPos][xPos] = `${xPos}, ${yPos}`;
+      }
+    }
+    return this;
+
   }
 
   getMap(): Map {
@@ -44,10 +65,10 @@ export class MapService {
   }
 
   getRowCount(): number {
-    return this.map.tiles.length + 1;
+    return this.map.tiles.length - 1;
   }
 
   getColCount(): number {
-    return this.map.tiles[0].length + 1;
+    return this.map.tiles[0].length - 1;
   }
 }
