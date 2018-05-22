@@ -26,7 +26,7 @@ export class RoverService {
     const direction = dir == "N" ? Facing.north : dir == "E" ? Facing.east : dir == "S" ? Facing.south : Facing.west;
     const rover = new Rover(xStart, yStart, direction, this.lastId++);
     this.rovers.push(rover);
-    rover.checkForBoundaries(this.mapService.getRowCount(), this.mapService.getColCount());
+    rover.checkForBoundaries(this.mapService.getRowCount()-1, this.mapService.getColCount()-1);
     return rover;
   }
 
