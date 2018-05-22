@@ -32,7 +32,6 @@ export class RoverService {
 
   deleteRoverById(id: number): RoverService {
     this.rovers = this.rovers.filter(r => r.id !== id);
-    this.lastId--;
     return this;
   }
 
