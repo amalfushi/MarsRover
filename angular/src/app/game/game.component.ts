@@ -56,7 +56,6 @@ export class GameComponent implements OnInit {
   addRover(): void {
     const coords = this.parseCoordinates(this.start, /^\d{2}[NESW]$/);
     if (coords && coords.length === 3) {
-      console.log(coords)
       const rover = this.roverService.addRover(coords[0], coords[1], coords[2]);
 
       this.mapService.addRover(rover);
@@ -73,7 +72,6 @@ export class GameComponent implements OnInit {
     this.roverService.deleteRoverById(rover.id);
     this.getRovers();
     this.getMap();
-    console.log(this.rovers)
   }
 
   executeInstructions(): void {

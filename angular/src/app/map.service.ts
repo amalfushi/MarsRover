@@ -29,7 +29,6 @@ export class MapService {
   }
 
   addRover(rover: Rover): MapService {
-    console.log(rover.column, rover.row, this.getRowCount())
     if (rover.column > -1 && rover.column < this.getColCount() + 1
       && rover.row > -1 && rover.row < this.getRowCount() + 1) {
 
@@ -43,7 +42,6 @@ export class MapService {
   }
 
   removeRover(rover: Rover): MapService {
-    console.log(rover.column, rover.row)
     if (this.map.tiles[this.getRowCount() -rover.row] && this.map.tiles[this.getRowCount() -rover.row][rover.column]) {
       if (this.map.tiles[this.getRowCount() -rover.row][rover.column].length > 1) {
         this.map.tiles[this.getRowCount() -rover.row][rover.column] = this.map.tiles[this.getRowCount() -rover.row][rover.column].filter(r => r.id !== rover.id)
