@@ -9,11 +9,4 @@ export class Map {
         this.columns = width;
         this.tiles = [];
     }
-
-    print(): void {
-        console.log(`${this.columns}x${this.rows}`)
-        for (let row of this.tiles) {
-            console.log(row)
-        }
-    }
 }
