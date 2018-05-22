@@ -1,7 +1,15 @@
 <!-- Create new map -->
 <section class="map-form" *ngIf="map == null">
   <h2>Create a new Mars Plateau</h2>
-  <p>Enter two digits for x and y respectively. Minimum plateau size is 2x2. Max size is 9x9</p>
+  <p>You are a Rover Operator for NASA landing rovers on Mars.</p>
+  <p>NASA recently discovered a number of curiously rectangular plateaus on the surface.</p>
+  <p>The project lead asked you to test the rovers navigation by creating plateaus in the MRCS (Mars Rover Communication Software).</p>
+  <br>
+  <p>Begin by creating a new plateau in the software. Oddly, the plateaus all fall in a range of sizes:</p>
+  <p>
+    <span class="bold">Smallest (2 2)</span> and the
+    <span class="bold">Largest (9 9)</span>
+  </p>
   <input class="new-map" [(ngModel)]="newMapSize" placeholder="eg: 5 5" (keyup.enter)="createMap()">
   <button (click)="createMap()">Create</button>
 </section>
@@ -24,23 +32,29 @@
 
 <!-- add rovers -->
 <section class="rover-form" *ngIf="map != null">
-  <h2>Create Rovers</h2>
-  <p>Enter two digits followed by a letter representing the cardinal direction the rover is facing</p>
+  <h2>Land Rovers</h2>
+  <p>The software divides into a grid with each square representing a section of the plateau.</p>
+  <p>To land a rover on the plateau, enter the
+    <span>X and Y Coordinates</span> of the square you would like as well as a letter for the
+    <span>Direction</span> you would like the rover to face.</p>
+  <p>
+    <span>Caution!</span> Rovers may be in the same section as another Rover, but they can also fall off the plateau.</p>
   <input class="new-rover" name="new-rover" [(ngModel)]="start" #newRover="ngModel" placeholder="eg: 2 2 N" autofocus="" (keyup.enter)="addRover()">
-  <button (click)="addRover()">Add Rover</button>
+  <button (click)="addRover()">Land Rover</button>
   <hr>
 </section>
 
 <!-- rovers list -->
 <div *ngIf="rovers.length > 0">
   <h2>Rover Instructions</h2>
-  <p>Enter a string of characters to direct the rover to move around the plateau. Each rover will move in order starting at
-    the top of the list. Empty strings will leave the rover where remains</p>
+  <p>Enter a string of characters to direct the rover to move around the plateau.</p>
+  <p>Each rover will move in order starting at the top of the list.</p>
+  <p>Empty strings will leave the rover where remains</p>
 
   <ul class="single-line">
-    <li> L = Rotate left 90°</li>
-    <li> R = Rotate right 90°</li>
-    <li> M = Move forward one space</li>
+    <li> <span>L</span> = Rotate left 90°</li>
+    <li> <span>R</span> = Rotate right 90°</li>
+    <li> <span>M</span> = Move forward one space</li>
   </ul>
 
   <form (submit)="executeInstructions()" #formData="ngForm">
