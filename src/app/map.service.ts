@@ -28,28 +28,26 @@ export class MapService {
     return this;
   }
 
-  addRover(rover: Rover, yPos, xPos): MapService {
-    if (rover.column > -1 && rover.column < this.getColCount()+1
-      && rover.row > -1 && rover.row < this.getRowCount()+1) {
+  addRover(rover: Rover): MapService {
+    if (rover.column > -1 && rover.column < this.getColCount() + 1
+      && rover.row > -1 && rover.row < this.getRowCount() + 1) {
 
-      if (this.map.tiles[yPos][xPos] instanceof Array) {
-        this.map.tiles[yPos][xPos].push(rover);
+      if (this.map.tiles[rover.column][rover.row] instanceof Array) {
+        this.map.tiles[rover.column][rover.row].push(rover);
       } else {
-        this.map.tiles[yPos][xPos] = [rover];
+        this.map.tiles[rover.column][rover.row] = [rover];
       }
     }
     return this;
   }
 
-  removeRover(rover: Rover, xPos: number, yPos: number): MapService {
-    console.log(xPos, yPos)
-      if (rover.column > -1 && rover.column < this.getColCount()+1
-      && rover.row > -1 && rover.row < this.getRowCount()+1) {
-
-      if (this.map.tiles[yPos][xPos].length > 1) {
-        this.map.tiles[yPos][xPos] = this.map.tiles[yPos][xPos].filter(r => r.id !== rover.id)
+  removeRover(rover: Rover): MapService {
+    console.log(rover.column, rover.row)
+    if (this.map.tiles[rover.column] && this.map.tiles[rover.column][rover.row]) {
+      if (this.map.tiles[rover.column][rover.row].length > 1) {
+        this.map.tiles[rover.column][rover.row] = this.map.tiles[rover.column][rover.row].filter(r => r.id !== rover.id)
       } else {
-        this.map.tiles[yPos][xPos] = `${xPos}, ${yPos}`;
+        this.map.tiles[rover.column][rover.row] = `${rover.row}, ${rover.column}`;
       }
     }
     return this;

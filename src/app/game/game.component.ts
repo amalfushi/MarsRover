@@ -59,9 +59,7 @@ export class GameComponent implements OnInit {
       console.log(coords)
       const rover = this.roverService.addRover(coords[0], coords[1], coords[2]);
 
-      this.mapService.addRover(rover,
-        this.mapService.getRowCount() - rover.row,
-        rover.column);
+      this.mapService.addRover(rover);
 
       rover.checkForBoundaries(this.mapService.getColCount()-1, this.mapService.getRowCount()-1)
       this.getRovers();
@@ -71,9 +69,7 @@ export class GameComponent implements OnInit {
   }
 
   deleteRover(rover: Rover): void {
-    this.mapService.removeRover(rover,
-      this.mapService.getRowCount() - rover.row,
-      rover.column);
+    this.mapService.removeRover(rover);
     this.roverService.deleteRoverById(rover.id);
     this.getRovers();
     this.getMap();
@@ -84,18 +80,14 @@ export class GameComponent implements OnInit {
     for (let rover of this.rovers) {
       if (rover.instructions && rover.status) {
         // remove rover from the map
-        this.mapService.removeRover(rover,
-          this.mapService.getRowCount() - rover.row,
-          rover.column);
+        this.mapService.removeRover(rover);
 
         // move rover as per the instrucitons
         rover.instructions = this.removeSpaces(rover.instructions);
         this.roverService.executeInstructionsById(rover.id);
 
         // Re-add the rover in the appropriate positon (unless it's outside the boundaries)
-        this.mapService.addRover(rover,
-          this.mapService.getRowCount() - rover.row,
-          rover.column);
+        this.mapService.addRover(rover);
         this.getMap();
       }
     }
