@@ -2,21 +2,22 @@ import { Facing } from "./direction.enum";
 
 export class Rover {
 
-
+    id: number;
     row: number;
     column: number;
     direction: Facing;
     instructions: string;
     status: boolean;
 
-    constructor(xStart: number, yStart: number, dir: Facing) {
+    constructor(xStart: number, yStart: number, dir: Facing, id: number) {
+        this.id = id;
         this.row = xStart;
         this.column = yStart;
         this.direction = dir;
         this.status = true;
     }
 
-    executeInstruction(str: string): Rover {
+    operate(str: string): Rover {
         switch (str) {
             case "L": {
                 this.left();
@@ -37,7 +38,7 @@ export class Rover {
     move(): Rover {
         switch (this.direction) {
             case Facing.north: {
-                this.row++;
+                this.row++; // flipped since the matrix' origin is uppper left
                 break;
             }
             case Facing.east: {
